@@ -7,7 +7,7 @@ they were sent.
 Install:
 ```
 # the mattermost codebase is huge, and this uses part of it. Download may take some time
-go get -vu github.com/arborchat/arbormost
+go get -v -u github.com/arborchat/arbormost
 ```
 
 Example usage:
