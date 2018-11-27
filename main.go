@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net"
+	"os"
 
 	arbor "github.com/arborchat/arbor-go"
 	"github.com/mattermost/mattermost-server/model"
@@ -51,6 +52,7 @@ func postToMM(url, teamName, channelName, username, password string) (chan<- str
 
 func main() {
 	var username, password, url, team, channel, arborAddress string
+	const passwordEnv = "MATTERMOST_PASSWORD"
 	flag.StringVar(&username, "username", "", "mattermost server username")
 	flag.StringVar(&password, "password", "", "mattermost server password")
 	flag.StringVar(&team, "team", "", "mattermost server team")
@@ -58,6 +60,12 @@ func main() {
 	flag.StringVar(&url, "url", "", "mattermost server url")
 	flag.StringVar(&arborAddress, "arbor-address", "localhost:7777", "arbor server address")
 	flag.Parse()
+	if password == "" {
+		password = os.Getenv(passwordEnv)
+		// todo: figure out why I can still access these in /proc/<pid>/environ
+		os.Clearenv()
+		log.Println("environment cleared")
+	}
 	sendChan, err := postToMM(url, team, channel, username, password)
 	if err != nil {
 		log.Println(err)
@@ -71,7 +79,7 @@ func main() {
 	recvChan := arbor.MakeMessageReader(conn)
 	for mesg := range recvChan {
 		if mesg.Type == arbor.NewMessageType {
-			sendChan <- arborAddress + " [id](" + mesg.UUID + ") [re](" + mesg.Parent + ") @" + mesg.Username + ": " + mesg.Content
+			sendChan <- "[serv](arbor://" + arborAddress + ") [id](" + mesg.UUID + ") [re](" + mesg.Parent + ") " + mesg.Username + ": " + mesg.Content
 		}
 	}
 }
