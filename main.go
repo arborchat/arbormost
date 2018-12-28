@@ -79,7 +79,7 @@ func main() {
 	recvChan := arbor.MakeMessageReader(conn)
 	for mesg := range recvChan {
 		if mesg.Type == arbor.NewMessageType {
-			sendChan <- "[serv](arbor://" + arborAddress + ") [id](" + mesg.UUID + ") [re](" + mesg.Parent + ") " + mesg.Username + ": " + mesg.Content
+			sendChan <- "[serv](arbor://" + arborAddress + ") [id](" + mesg.UUID + ") [re](" + mesg.Parent + ") `" + mesg.Username + "`: " + mesg.Content
 		}
 	}
 }
