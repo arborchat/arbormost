@@ -4,6 +4,8 @@ A one-way bridge that relays arbor messages from an arbor server onto a mattermo
 There is no way to reply to the arbor messages except by joining the arbor server on which
 they were sent.
 
+You can get information about the Arbor project [here](https://man.sr.ht/~whereswaldon/arborchat/).
+
 Install:
 ```
 # the mattermost codebase is huge, and this uses part of it. Download may take some time
